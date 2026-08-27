@@ -74,13 +74,6 @@ def veritabani_olustur():
     """)
 
     # TÜM CEVAPLAR
-    #
-    # bolum:
-    # kitap / not / muzik / kalp / sohbet
-    #
-    # hedef_id:
-    # Cevabın hangi paylaşıma ait olduğunu gösterir.
-    #
     conn.execute("""
         CREATE TABLE IF NOT EXISTS yanitlar (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -101,7 +94,7 @@ def veritabani_olustur():
 
 @app.route("/")
 def index():
-    return render_template("anasayfa.html")
+    return render_template("index.html")
 
 
 # =========================================
@@ -259,6 +252,7 @@ def kitap():
 
 
 # KİTAP DÜZENLE
+
 @app.route("/kitap_duzenle/<int:kitap_id>", methods=["GET", "POST"])
 def kitap_duzenle(kitap_id):
 
@@ -314,6 +308,7 @@ def kitap_duzenle(kitap_id):
 
 
 # KİTAP SİL
+
 @app.route("/kitap_sil/<int:kitap_id>", methods=["POST"])
 def kitap_sil(kitap_id):
 
@@ -413,6 +408,7 @@ def notlar():
 
 
 # NOT DÜZENLE
+
 @app.route("/not_duzenle/<int:not_id>", methods=["GET", "POST"])
 def not_duzenle(not_id):
 
@@ -468,6 +464,7 @@ def not_duzenle(not_id):
 
 
 # NOT SİL
+
 @app.route("/not_sil/<int:not_id>", methods=["POST"])
 def not_sil(not_id):
 
@@ -567,6 +564,7 @@ def muzik():
 
 
 # MÜZİK DÜZENLE
+
 @app.route("/muzik_duzenle/<int:muzik_id>", methods=["GET", "POST"])
 def muzik_duzenle(muzik_id):
 
@@ -622,6 +620,7 @@ def muzik_duzenle(muzik_id):
 
 
 # MÜZİK SİL
+
 @app.route("/muzik_sil/<int:muzik_id>", methods=["POST"])
 def muzik_sil(muzik_id):
 
@@ -723,6 +722,7 @@ def kalp():
 
 
 # KALP DÜZENLE
+
 @app.route("/kalp_duzenle/<int:kalp_id>", methods=["GET", "POST"])
 def kalp_duzenle(kalp_id):
 
@@ -780,6 +780,7 @@ def kalp_duzenle(kalp_id):
 
 
 # KALP SİL
+
 @app.route("/kalp_sil/<int:kalp_id>", methods=["POST"])
 def kalp_sil(kalp_id):
 
