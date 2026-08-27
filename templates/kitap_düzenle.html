@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Kitap Düzenle</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="kullanici-alani">
+
+        {% if session.get("kullanici_adi") %}
+
+            👋 Hoş geldin, {{ session["kullanici_adi"] }}!
+
+            <a href="{{ url_for('cikis') }}">
+                🚪 Çıkış Yap
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <h1 class="site-baslik">
+        ✏️ Kitap Önerisini Düzenle
+    </h1>
+
+
+    <div class="kart">
+
+        <h2>
+            📚 Kitap Bilgilerini Düzenle
+        </h2>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="kitap_adi"
+                value="{{ kitap[1] }}"
+                placeholder="Kitap adı"
+                required
+            >
+
+            <br><br>
+
+            <input
+                type="text"
+                name="yazar"
+                value="{{ kitap[2] }}"
+                placeholder="Yazar"
+                required
+            >
+
+            <br><br>
+
+            <button type="submit">
+                💾 Değişiklikleri Kaydet
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('kitap') }}">
+            ↩️ Vazgeç ve geri dön
+        </a>
+
+    </div>
+
+</body>
+</html>

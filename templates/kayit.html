@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kayıt Ol - Do I Wanna Book & Music?</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+</head>
+
+<body>
+
+    <div class="giris-kutu">
+
+        <h1>Kayıt Ol</h1>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="kullanici_adi"
+                placeholder="Kullanıcı adı"
+                required
+            >
+
+            <input
+                type="password"
+                name="sifre"
+                placeholder="Şifre"
+                required
+            >
+
+            <button type="submit">
+                Kayıt Ol
+            </button>
+
+        </form>
+
+        <p>
+            Zaten hesabın var mı?
+            <a href="{{ url_for('giris') }}">Giriş Yap</a>
+        </p>
+
+        <p>
+            <a href="{{ url_for('index') }}">Ana Sayfaya Dön</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Notu Düzenle</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+    <div class="kullanici-alani">
+
+        {% if session.get("kullanici_adi") %}
+
+            👋 Hoş geldin, {{ session["kullanici_adi"] }}!
+
+            <a href="{{ url_for('cikis') }}">
+                🚪 Çıkış Yap
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <h1 class="site-baslik">
+        ✏️ Kitap Notunu Düzenle
+    </h1>
+
+
+    <div class="kart">
+
+        <h2>
+            📝 Not Bilgilerini Düzenle
+        </h2>
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="kitap_adi"
+                value="{{ not_item[1] }}"
+                placeholder="Kitap adı"
+                required
+            >
+
+            <br><br>
+
+            <textarea
+                name="not_metni"
+                placeholder="Düşüncelerini buraya yaz..."
+                rows="8"
+                required
+            >{{ not_item[2] }}</textarea>
+
+            <br><br>
+
+            <button type="submit">
+                💾 Değişiklikleri Kaydet
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="{{ url_for('notlar') }}">
+            ↩️ Vazgeç ve geri dön
+        </a>
+
+    </div>
+
+</body>
+</html>
