@@ -1,5 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
+DATABASE_URL = "postgresql://neondb_owner:npg_sIjLreHN58PA@ep-divine-bread-a56wh69j-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgre
