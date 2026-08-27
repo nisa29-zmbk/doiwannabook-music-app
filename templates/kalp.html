@@ -19,8 +19,11 @@
 
 </head>
 
+
 <body>
 
+
+    <!-- KULLANICI ALANI -->
 
     <div class="kullanici-alani">
 
@@ -39,97 +42,152 @@
     </div>
 
 
+    <!-- BAŞLIK -->
+
     <h1 class="site-baslik">
         ❤️ Bu Şarkıyı Seviyorum Çünkü…
     </h1>
 
 
-    <!-- PAYLAŞ -->
+    <!-- PAYLAŞIM FORMU -->
 
-    <div class="kart">
+    <div class="kart kalp-form">
 
-        <h2>
-            Bir şarkıyı neden seviyorsun?
-        </h2>
+
+        <div class="form-baslik">
+
+            <span class="form-ikon">
+                ❤️
+            </span>
+
+            <h2>
+                Bir şarkıyı neden seviyorsun?
+            </h2>
+
+            <p>
+                Sevdiğin şarkının sende bıraktığı duyguyu paylaş.
+            </p>
+
+        </div>
+
 
         <form method="POST">
 
+
+            <label for="sarki_adi">
+                🎵 Şarkı adı
+            </label>
+
             <input
+                id="sarki_adi"
                 type="text"
                 name="sarki_adi"
-                placeholder="Şarkı adı"
+                placeholder="Şarkının adını yaz..."
                 required
             >
 
-            <br><br>
+
+            <label for="sanatci">
+                🎤 Sanatçı
+            </label>
 
             <input
+                id="sanatci"
                 type="text"
                 name="sanatci"
-                placeholder="Sanatçı"
+                placeholder="Sanatçının adını yaz..."
                 required
             >
 
-            <br><br>
+
+            <label for="neden">
+                💭 Neden seviyorsun?
+            </label>
 
             <textarea
+                id="neden"
                 name="neden"
                 placeholder="Bu şarkıyı neden seviyorsun?"
                 rows="5"
+                maxlength="2000"
                 required
             ></textarea>
 
-            <br><br>
 
-            <button type="submit">
+            <button
+                type="submit"
+                class="ana-form-butonu kalp-butonu"
+            >
                 ❤️ Paylaş
             </button>
+
 
         </form>
 
     </div>
 
 
-    <h2>
+    <!-- PAYLAŞILANLAR -->
+
+    <h2 class="liste-basligi">
         💕 Paylaşılanlar
     </h2>
 
 
     {% for kalp in kalpler %}
 
-        <div class="kart">
 
-            <p>
+        <div class="kart kalp-karti">
 
-                ❤️
-                <strong>
-                    {{ kalp[1] }}
-                </strong>
 
-                <br>
+            <!-- PAYLAŞIM -->
 
-                🎤 {{ kalp[2] }}
+            <div class="paylasim-icerik">
 
-                <br><br>
 
-                💭 {{ kalp[3] }}
+                <div class="paylasim-baslik">
 
-                <br>
+                    <span class="paylasim-ikon">
+                        ❤️
+                    </span>
 
-                <small>
+                    <strong>
+                        {{ kalp[1] }}
+                    </strong>
+
+                </div>
+
+
+                <p class="sanatci-bilgisi">
+                    🎤 {{ kalp[2] }}
+                </p>
+
+
+                <div class="kalp-nedeni">
+
+                    💭 {{ kalp[3] }}
+
+                </div>
+
+
+                <small class="paylasan-kullanici">
                     👤 {{ kalp[4] }}
                 </small>
 
-            </p>
+
+            </div>
 
 
-            <!-- SADECE KENDİ PAYLAŞIMINI DÜZENLE / SİL -->
+            <!-- KENDİ PAYLAŞIMINI DÜZENLE / SİL -->
 
             {% if session.get("kullanici_adi") == kalp[4] %}
 
-                <div>
+
+                <div class="paylasim-islemleri">
+
 
                     <a
+                        class="duzenle-btn"
                         href="{{ url_for('kalp_duzenle', kalp_id=kalp[0]) }}"
                     >
                         ✏️ Düzenle
@@ -139,130 +197,199 @@
                     <form
                         method="POST"
                         action="{{ url_for('kalp_sil', kalp_id=kalp[0]) }}"
-                        style="display:inline;"
                         onsubmit="return confirm('Bu paylaşımı silmek istediğine emin misin?');"
                     >
 
-                        <button type="submit">
+                        <button
+                            type="submit"
+                            class="sil-btn"
+                        >
                             🗑️ Sil
                         </button>
 
                     </form>
 
+
                 </div>
+
 
             {% endif %}
 
 
-            <br>
+            <!-- YORUM ALANI -->
+
+            <div class="yorum-alani">
 
 
-            <!-- CEVAP YAZ -->
+                <div class="yorum-baslik">
 
-            <form
-                method="POST"
-                action="{{ url_for('cevap_ver', bolum='kalp', hedef_id=kalp[0]) }}"
-            >
+                    <span>
+                        💬
+                    </span>
 
-                <input
-                    type="text"
-                    name="cevap"
-                    placeholder="Bu paylaşıma cevap yaz..."
-                    required
+                    <strong>
+                        Bu paylaşıma yorum yap
+                    </strong>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cevap_ver', bolum='kalp', hedef_id=kalp[0]) }}"
+                    class="yorum-form"
                 >
 
-                <button type="submit">
-                    💬 Cevapla
-                </button>
-
-            </form>
-
-
-            <!-- CEVAPLAR -->
-
-            {% for cevap in cevaplar %}
-
-                {% if cevap[1] == kalp[0] %}
-
-                    <div class="kart">
-
-                        <p>
-
-                            💬
-                            <strong>
-                                {{ cevap[3] }}
-                            </strong>
-
-                            <br>
-
-                            {{ cevap[2] }}
-
-                        </p>
+                    <textarea
+                        name="cevap"
+                        placeholder="Sen ne düşünüyorsun?"
+                        rows="3"
+                        maxlength="500"
+                        required
+                    ></textarea>
 
 
-                        <!-- SADECE KENDİ CEVABINI DÜZENLE / SİL -->
+                    <button
+                        type="submit"
+                        class="yorum-gonder-btn"
+                    >
+                        💬 Yorum Gönder
+                    </button>
 
-                        {% if session.get("kullanici_adi") == cevap[3] %}
-
-                            <form
-                                method="POST"
-                                action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
-                            >
-
-                                <input
-                                    type="text"
-                                    name="cevap"
-                                    value="{{ cevap[2] }}"
-                                    required
-                                >
-
-                                <button type="submit">
-                                    ✏️ Düzenle
-                                </button>
-
-                            </form>
+                </form>
 
 
-                            <form
-                                method="POST"
-                                action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
-                                onsubmit="return confirm('Bu cevabı silmek istediğine emin misin?');"
-                            >
+            </div>
 
-                                <button type="submit">
-                                    🗑️ Cevabı Sil
-                                </button>
 
-                            </form>
+            <!-- YORUMLAR -->
 
-                        {% endif %}
+            <div class="yorumlar">
 
-                    </div>
 
-                {% endif %}
+                {% for cevap in cevaplar %}
 
-            {% endfor %}
+
+                    {% if cevap[1] == kalp[0] %}
+
+
+                        <div class="yorum-karti">
+
+
+                            <div class="yorum-kullanici">
+
+                                <span>
+                                    👤
+                                </span>
+
+                                <strong>
+                                    {{ cevap[3] }}
+                                </strong>
+
+                            </div>
+
+
+                            <p class="yorum-metni">
+                                {{ cevap[2] }}
+                            </p>
+
+
+                            <!-- KENDİ YORUMUNU DÜZENLE / SİL -->
+
+                            {% if session.get("kullanici_adi") == cevap[3] %}
+
+
+                                <div class="yorum-islemleri">
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="cevap"
+                                            value="{{ cevap[2] }}"
+                                            required
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="duzenle-btn"
+                                        >
+                                            ✏️ Kaydet
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
+                                        onsubmit="return confirm('Bu yorumu silmek istediğine emin misin?');"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="sil-btn"
+                                        >
+                                            🗑️ Sil
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
 
         </div>
+
 
     {% else %}
 
-        <div class="kart">
 
-            Henüz paylaşım yapılmamış. ❤️
+        <div class="kart bos-kart">
+
+            <p>
+                Henüz paylaşım yapılmamış. ❤️
+            </p>
+
+            <span>
+                İlk paylaşımı sen yap! ✨
+            </span>
 
         </div>
+
 
     {% endfor %}
 
 
-    <br>
+    <!-- ANA SAYFA -->
 
-
-    <a href="{{ url_for('index') }}">
+    <a
+        href="{{ url_for('index') }}"
+        class="ana-sayfa-btn"
+    >
         🏠 Ana Sayfaya Dön
     </a>
 
 
 </body>
+
 </html>

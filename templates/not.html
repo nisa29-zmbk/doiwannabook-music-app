@@ -19,8 +19,11 @@
 
 </head>
 
+
 <body>
 
+
+    <!-- KULLANICI ALANI -->
 
     <div class="kullanici-alani">
 
@@ -39,6 +42,8 @@
     </div>
 
 
+    <!-- BAŞLIK -->
+
     <h1 class="site-baslik">
         📝 Kitap Notları
     </h1>
@@ -46,77 +51,124 @@
 
     <!-- NOT PAYLAŞ -->
 
-    <div class="kart">
+    <div class="kart kitap-form">
 
-        <h2>
-            Senin gözünden kitap nasıldı?
-        </h2>
+        <div class="form-baslik">
+
+            <span class="form-ikon">
+                📝
+            </span>
+
+            <h2>
+                Senin gözünden kitap nasıldı?
+            </h2>
+
+            <p>
+                Kitap hakkındaki düşüncelerini paylaş.
+            </p>
+
+        </div>
+
 
         <form method="POST">
 
+
+            <label for="kitap_adi">
+                📚 Kitap adı
+            </label>
+
             <input
+                id="kitap_adi"
                 type="text"
                 name="kitap_adi"
-                placeholder="Kitap adı"
+                placeholder="Kitabın adını yaz..."
                 required
             >
 
-            <br><br>
+
+            <label for="not_metni">
+                💭 Düşüncelerin
+            </label>
 
             <textarea
+                id="not_metni"
                 name="not_metni"
-                placeholder="Düşüncelerini buraya yaz..."
+                placeholder="Bu kitap hakkında ne düşünüyorsun?"
                 rows="6"
+                maxlength="2000"
                 required
             ></textarea>
 
-            <br><br>
 
-            <button type="submit">
+            <button
+                type="submit"
+                class="ana-form-butonu"
+            >
                 📝 Notu Paylaş
             </button>
+
 
         </form>
 
     </div>
 
 
-    <h2>
+    <!-- NOTLAR -->
+
+    <h2 class="liste-basligi">
         📖 Paylaşılan Notlar
     </h2>
 
 
     {% for not_item in notlar %}
 
-        <div class="kart">
 
-            <p>
+        <div class="kart not-karti">
 
-                📚
-                <strong>
-                    {{ not_item[1] }}
-                </strong>
 
-                <br><br>
+            <!-- NOT İÇERİĞİ -->
 
-                {{ not_item[2] }}
+            <div class="paylasim-icerik">
 
-                <br><br>
 
-                <small>
+                <div class="paylasim-baslik">
+
+                    <span class="paylasim-ikon">
+                        📚
+                    </span>
+
+                    <strong>
+                        {{ not_item[1] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="not-metni">
+
+                    {{ not_item[2] }}
+
+                </div>
+
+
+                <small class="paylasan-kullanici">
                     👤 {{ not_item[3] }}
                 </small>
 
-            </p>
+
+            </div>
 
 
-            <!-- SADECE KENDİ NOTUNU DÜZENLE / SİL -->
+            <!-- KENDİ NOTUNU DÜZENLE / SİL -->
 
             {% if session.get("kullanici_adi") == not_item[3] %}
 
-                <div>
+
+                <div class="paylasim-islemleri">
+
 
                     <a
+                        class="duzenle-btn"
                         href="{{ url_for('not_duzenle', not_id=not_item[0]) }}"
                     >
                         ✏️ Düzenle
@@ -126,132 +178,199 @@
                     <form
                         method="POST"
                         action="{{ url_for('not_sil', not_id=not_item[0]) }}"
-                        style="display:inline;"
                         onsubmit="return confirm('Bu notu silmek istediğine emin misin?');"
                     >
 
-                        <button type="submit">
+                        <button
+                            type="submit"
+                            class="sil-btn"
+                        >
                             🗑️ Sil
                         </button>
 
                     </form>
 
+
                 </div>
+
 
             {% endif %}
 
 
-            <br>
+            <!-- YORUM ALANI -->
+
+            <div class="yorum-alani">
 
 
-            <!-- CEVAP YAZ -->
+                <div class="yorum-baslik">
 
-            <form
-                method="POST"
-                action="{{ url_for('cevap_ver', bolum='not', hedef_id=not_item[0]) }}"
-            >
+                    <span>
+                        💬
+                    </span>
 
-                <input
-                    type="text"
-                    name="cevap"
-                    placeholder="Bu nota cevap yaz..."
-                    required
+                    <strong>
+                        Bu nota yorum yap
+                    </strong>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cevap_ver', bolum='not', hedef_id=not_item[0]) }}"
+                    class="yorum-form"
                 >
 
-                <button type="submit">
-                    💬 Cevapla
-                </button>
-
-            </form>
-
-
-            <!-- CEVAPLAR -->
-
-            {% for cevap in cevaplar %}
-
-                {% if cevap[1] == not_item[0] %}
-
-                    <div class="kart">
-
-                        <p>
-
-                            💬
-                            <strong>
-                                {{ cevap[3] }}
-                            </strong>
-
-                            <br>
-
-                            {{ cevap[2] }}
-
-                        </p>
+                    <textarea
+                        name="cevap"
+                        placeholder="Bu not hakkında ne düşünüyorsun?"
+                        rows="3"
+                        maxlength="500"
+                        required
+                    ></textarea>
 
 
-                        <!-- SADECE KENDİ CEVABINI DÜZENLE / SİL -->
+                    <button
+                        type="submit"
+                        class="yorum-gonder-btn"
+                    >
+                        💬 Yorum Gönder
+                    </button>
 
-                        {% if session.get("kullanici_adi") == cevap[3] %}
-
-                            <form
-                                method="POST"
-                                action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
-                            >
-
-                                <input
-                                    type="text"
-                                    name="cevap"
-                                    value="{{ cevap[2] }}"
-                                    required
-                                >
-
-                                <button type="submit">
-                                    ✏️ Düzenle
-                                </button>
-
-                            </form>
+                </form>
 
 
-                            <form
-                                method="POST"
-                                action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
-                                onsubmit="return confirm('Bu cevabı silmek istediğine emin misin?');"
-                            >
+            </div>
 
-                                <button type="submit">
-                                    🗑️ Cevabı Sil
-                                </button>
 
-                            </form>
+            <!-- YORUMLAR -->
 
-                        {% endif %}
+            <div class="yorumlar">
 
-                    </div>
 
-                {% endif %}
+                {% for cevap in cevaplar %}
 
-            {% endfor %}
+
+                    {% if cevap[1] == not_item[0] %}
+
+
+                        <div class="yorum-karti">
+
+
+                            <div class="yorum-kullanici">
+
+                                <span>
+                                    👤
+                                </span>
+
+                                <strong>
+                                    {{ cevap[3] }}
+                                </strong>
+
+                            </div>
+
+
+                            <p class="yorum-metni">
+                                {{ cevap[2] }}
+                            </p>
+
+
+                            <!-- KENDİ YORUMUNU DÜZENLE / SİL -->
+
+                            {% if session.get("kullanici_adi") == cevap[3] %}
+
+
+                                <div class="yorum-islemleri">
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="cevap"
+                                            value="{{ cevap[2] }}"
+                                            required
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="duzenle-btn"
+                                        >
+                                            ✏️ Kaydet
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
+                                        onsubmit="return confirm('Bu yorumu silmek istediğine emin misin?');"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="sil-btn"
+                                        >
+                                            🗑️ Sil
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
 
         </div>
 
+
     {% else %}
 
-        <div class="kart">
+
+        <div class="kart bos-kart">
 
             <p>
                 Henüz paylaşılmış bir not yok. 📝
             </p>
 
+            <span>
+                İlk notu sen paylaş! ✨
+            </span>
+
         </div>
+
 
     {% endfor %}
 
 
-    <br>
+    <!-- ANA SAYFA -->
 
-
-    <a href="{{ url_for('index') }}">
+    <a
+        href="{{ url_for('index') }}"
+        class="ana-sayfa-btn"
+    >
         🏠 Ana Sayfaya Dön
     </a>
 
 
 </body>
+
 </html>

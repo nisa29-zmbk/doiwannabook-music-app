@@ -15,42 +15,137 @@
 
 <body>
 
-    <div class="giris-kutu">
+    <div class="kullanici-alani">
+        <a href="{{ url_for('index') }}">
+            🏠 Ana Sayfa
+        </a>
+    </div>
 
-        <h1>Kayıt Ol</h1>
+
+    <h1 class="site-baslik">
+        ✨ Aramıza Katıl
+    </h1>
+
+
+    <div class="kart giris-kutu">
+
+        <div class="form-baslik">
+            <span class="form-ikon">💜</span>
+
+            <h2>
+                Yeni Hesap Oluştur
+            </h2>
+
+            <p>
+                Kitaplarını, müziklerini ve düşüncelerini paylaşmaya başla.
+            </p>
+        </div>
+
 
         <form method="POST">
 
+            <label for="kullanici_adi">
+                👤 Kullanıcı adı
+            </label>
+
             <input
+                id="kullanici_adi"
                 type="text"
                 name="kullanici_adi"
-                placeholder="Kullanıcı adı"
+                placeholder="Kullanıcı adını yaz..."
+                autocomplete="username"
                 required
             >
 
-            <input
-                type="password"
-                name="sifre"
-                placeholder="Şifre"
-                required
-            >
 
-            <button type="submit">
-                Kayıt Ol
+            <label for="sifre">
+                🔐 Şifre
+            </label>
+
+            <div class="sifre-alani">
+
+                <input
+                    id="sifre"
+                    type="password"
+                    name="sifre"
+                    placeholder="Şifreni oluştur..."
+                    autocomplete="new-password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="sifre-goster"
+                    onclick="sifreGosterGizle()"
+                    aria-label="Şifreyi göster"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="ana-form-butonu"
+            >
+                ✨ Kayıt Ol
             </button>
 
         </form>
 
-        <p>
-            Zaten hesabın var mı?
-            <a href="{{ url_for('giris') }}">Giriş Yap</a>
-        </p>
 
-        <p>
-            <a href="{{ url_for('index') }}">Ana Sayfaya Dön</a>
+        <div class="form-ayirici">
+            <span>veya</span>
+        </div>
+
+
+        <p class="form-alt-yazi">
+            Zaten hesabın var mı?
+            <a href="{{ url_for('giris') }}">
+                Giriş Yap
+            </a>
         </p>
 
     </div>
+
+
+    <script>
+
+        function sifreGosterGizle() {
+
+            const sifre =
+                document.getElementById("sifre");
+
+            const buton =
+                document.querySelector(".sifre-goster");
+
+
+            if (sifre.type === "password") {
+
+                sifre.type = "text";
+
+                buton.textContent = "🙈";
+
+                buton.setAttribute(
+                    "aria-label",
+                    "Şifreyi gizle"
+                );
+
+            } else {
+
+                sifre.type = "password";
+
+                buton.textContent = "👁️";
+
+                buton.setAttribute(
+                    "aria-label",
+                    "Şifreyi göster"
+                );
+            }
+        }
+
+    </script>
 
 </body>
 </html>
