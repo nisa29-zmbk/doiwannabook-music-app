@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Sohbet Vakti</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- KULLANICI ALANI -->
+
+    <div class="kullanici-alani">
+
+        {% if session.get("kullanici_adi") %}
+
+            <span>
+                👋 Hoş geldin, {{ session["kullanici_adi"] }}!
+            </span>
+
+            <a href="{{ url_for('cikis') }}">
+                🚪 Çıkış Yap
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- BAŞLIK -->
+
+    <h1 class="site-baslik">
+        💬 Sohbet Vakti
+    </h1>
+
+
+    <!-- MESAJ PAYLAŞ -->
+
+    <div class="kart sohbet-form">
+
+
+        <div class="form-baslik">
+
+            <span class="form-ikon">
+                💭
+            </span>
+
+            <h2>
+                Bir şeyler söylemek ister misin?
+            </h2>
+
+            <p>
+                Düşünceni herkesle paylaş.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+
+            <label for="mesaj">
+                💬 Mesajın
+            </label>
+
+            <textarea
+                id="mesaj"
+                name="mesaj"
+                placeholder="Düşünceni buraya yaz..."
+                rows="5"
+                maxlength="2000"
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="ana-form-butonu"
+            >
+                💬 Paylaş
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- SOHBET -->
+
+    <h2 class="liste-basligi">
+        💬 Sohbet
+    </h2>
+
+
+    {% for sohbet in sohbetler %}
+
+
+        <div class="kart sohbet-karti">
+
+
+            <!-- MESAJ -->
+
+            <div class="paylasim-icerik">
+
+
+                <div class="yorum-kullanici">
+
+                    <span>
+                        👤
+                    </span>
+
+                    <strong>
+                        {{ sohbet[2] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="sohbet-mesaji">
+
+                    💬 {{ sohbet[1] }}
+
+                </div>
+
+
+            </div>
+
+
+            <!-- KENDİ MESAJINI DÜZENLE / SİL -->
+
+            {% if session.get("kullanici_adi") == sohbet[2] %}
+
+
+                <div class="paylasim-islemleri">
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('sohbet_duzenle', sohbet_id=sohbet[0]) }}"
+                    >
+
+                        <textarea
+                            name="mesaj"
+                            rows="3"
+                            maxlength="2000"
+                            required
+                        >{{ sohbet[1] }}</textarea>
+
+
+                        <button
+                            type="submit"
+                            class="duzenle-btn"
+                        >
+                            ✏️ Kaydet
+                        </button>
+
+                    </form>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('sohbet_sil', sohbet_id=sohbet[0]) }}"
+                        onsubmit="return confirm('Bu mesajı silmek istediğine emin misin?');"
+                    >
+
+                        <button
+                            type="submit"
+                            class="sil-btn"
+                        >
+                            🗑️ Sil
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+            <!-- CEVAP / YORUM ALANI -->
+
+            <div class="yorum-alani">
+
+
+                <div class="yorum-baslik">
+
+                    <span>
+                        💬
+                    </span>
+
+                    <strong>
+                        Bu mesaja cevap ver
+                    </strong>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cevap_ver', bolum='sohbet', hedef_id=sohbet[0]) }}"
+                    class="yorum-form"
+                >
+
+                    <textarea
+                        name="cevap"
+                        placeholder="Bu mesaja ne cevap vermek istersin?"
+                        rows="3"
+                        maxlength="500"
+                        required
+                    ></textarea>
+
+
+                    <button
+                        type="submit"
+                        class="yorum-gonder-btn"
+                    >
+                        ↩️ Cevap Gönder
+                    </button>
+
+                </form>
+
+
+            </div>
+
+
+            <!-- CEVAPLAR -->
+
+            <div class="yorumlar">
+
+
+                {% for cevap in cevaplar %}
+
+
+                    {% if cevap[1] == sohbet[0] %}
+
+
+                        <div class="yorum-karti">
+
+
+                            <div class="yorum-kullanici">
+
+                                <span>
+                                    👤
+                                </span>
+
+                                <strong>
+                                    {{ cevap[3] }}
+                                </strong>
+
+                            </div>
+
+
+                            <p class="yorum-metni">
+                                {{ cevap[2] }}
+                            </p>
+
+
+                            <!-- KENDİ CEVABINI DÜZENLE / SİL -->
+
+                            {% if session.get("kullanici_adi") == cevap[3] %}
+
+
+                                <div class="yorum-islemleri">
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="cevap"
+                                            value="{{ cevap[2] }}"
+                                            required
+                                        >
+
+
+                                        <button
+                                            type="submit"
+                                            class="duzenle-btn"
+                                        >
+                                            ✏️ Kaydet
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
+                                        onsubmit="return confirm('Bu cevabı silmek istediğine emin misin?');"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="sil-btn"
+                                        >
+                                            🗑️ Sil
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="kart bos-kart">
+
+            <p>
+                Henüz hiç mesaj yok. 💬
+            </p>
+
+            <span>
+                İlk mesajı sen yaz! ✨
+            </span>
+
+        </div>
+
+
+    {% endfor %}
+
+
+    <!-- ANA SAYFA -->
+
+    <a
+        href="{{ url_for('index') }}"
+        class="ana-sayfa-btn"
+    >
+        🏠 Ana Sayfaya Dön
+    </a>
+
+
+</body>
+
+</html>

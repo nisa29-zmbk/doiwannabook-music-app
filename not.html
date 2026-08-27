@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Kitap Notları</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- KULLANICI ALANI -->
+
+    <div class="kullanici-alani">
+
+        {% if session.get("kullanici_adi") %}
+
+            <span>
+                👋 Hoş geldin, {{ session["kullanici_adi"] }}!
+            </span>
+
+            <a href="{{ url_for('cikis') }}">
+                🚪 Çıkış Yap
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- BAŞLIK -->
+
+    <h1 class="site-baslik">
+        📝 Kitap Notları
+    </h1>
+
+
+    <!-- NOT PAYLAŞ -->
+
+    <div class="kart kitap-form">
+
+        <div class="form-baslik">
+
+            <span class="form-ikon">
+                📝
+            </span>
+
+            <h2>
+                Senin gözünden kitap nasıldı?
+            </h2>
+
+            <p>
+                Kitap hakkındaki düşüncelerini paylaş.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+
+            <label for="kitap_adi">
+                📚 Kitap adı
+            </label>
+
+            <input
+                id="kitap_adi"
+                type="text"
+                name="kitap_adi"
+                placeholder="Kitabın adını yaz..."
+                required
+            >
+
+
+            <label for="not_metni">
+                💭 Düşüncelerin
+            </label>
+
+            <textarea
+                id="not_metni"
+                name="not_metni"
+                placeholder="Bu kitap hakkında ne düşünüyorsun?"
+                rows="6"
+                maxlength="2000"
+                required
+            ></textarea>
+
+
+            <button
+                type="submit"
+                class="ana-form-butonu"
+            >
+                📝 Notu Paylaş
+            </button>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- NOTLAR -->
+
+    <h2 class="liste-basligi">
+        📖 Paylaşılan Notlar
+    </h2>
+
+
+    {% for not_item in notlar %}
+
+
+        <div class="kart not-karti">
+
+
+            <!-- NOT İÇERİĞİ -->
+
+            <div class="paylasim-icerik">
+
+
+                <div class="paylasim-baslik">
+
+                    <span class="paylasim-ikon">
+                        📚
+                    </span>
+
+                    <strong>
+                        {{ not_item[1] }}
+                    </strong>
+
+                </div>
+
+
+                <div class="not-metni">
+
+                    {{ not_item[2] }}
+
+                </div>
+
+
+                <small class="paylasan-kullanici">
+                    👤 {{ not_item[3] }}
+                </small>
+
+
+            </div>
+
+
+            <!-- KENDİ NOTUNU DÜZENLE / SİL -->
+
+            {% if session.get("kullanici_adi") == not_item[3] %}
+
+
+                <div class="paylasim-islemleri">
+
+
+                    <a
+                        class="duzenle-btn"
+                        href="{{ url_for('not_duzenle', not_id=not_item[0]) }}"
+                    >
+                        ✏️ Düzenle
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="{{ url_for('not_sil', not_id=not_item[0]) }}"
+                        onsubmit="return confirm('Bu notu silmek istediğine emin misin?');"
+                    >
+
+                        <button
+                            type="submit"
+                            class="sil-btn"
+                        >
+                            🗑️ Sil
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+            {% endif %}
+
+
+            <!-- YORUM ALANI -->
+
+            <div class="yorum-alani">
+
+
+                <div class="yorum-baslik">
+
+                    <span>
+                        💬
+                    </span>
+
+                    <strong>
+                        Bu nota yorum yap
+                    </strong>
+
+                </div>
+
+
+                <form
+                    method="POST"
+                    action="{{ url_for('cevap_ver', bolum='not', hedef_id=not_item[0]) }}"
+                    class="yorum-form"
+                >
+
+                    <textarea
+                        name="cevap"
+                        placeholder="Bu not hakkında ne düşünüyorsun?"
+                        rows="3"
+                        maxlength="500"
+                        required
+                    ></textarea>
+
+
+                    <button
+                        type="submit"
+                        class="yorum-gonder-btn"
+                    >
+                        💬 Yorum Gönder
+                    </button>
+
+                </form>
+
+
+            </div>
+
+
+            <!-- YORUMLAR -->
+
+            <div class="yorumlar">
+
+
+                {% for cevap in cevaplar %}
+
+
+                    {% if cevap[1] == not_item[0] %}
+
+
+                        <div class="yorum-karti">
+
+
+                            <div class="yorum-kullanici">
+
+                                <span>
+                                    👤
+                                </span>
+
+                                <strong>
+                                    {{ cevap[3] }}
+                                </strong>
+
+                            </div>
+
+
+                            <p class="yorum-metni">
+                                {{ cevap[2] }}
+                            </p>
+
+
+                            <!-- KENDİ YORUMUNU DÜZENLE / SİL -->
+
+                            {% if session.get("kullanici_adi") == cevap[3] %}
+
+
+                                <div class="yorum-islemleri">
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_duzenle', cevap_id=cevap[0]) }}"
+                                    >
+
+                                        <input
+                                            type="text"
+                                            name="cevap"
+                                            value="{{ cevap[2] }}"
+                                            required
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="duzenle-btn"
+                                        >
+                                            ✏️ Kaydet
+                                        </button>
+
+                                    </form>
+
+
+                                    <form
+                                        method="POST"
+                                        action="{{ url_for('cevap_sil', cevap_id=cevap[0]) }}"
+                                        onsubmit="return confirm('Bu yorumu silmek istediğine emin misin?');"
+                                    >
+
+                                        <button
+                                            type="submit"
+                                            class="sil-btn"
+                                        >
+                                            🗑️ Sil
+                                        </button>
+
+                                    </form>
+
+
+                                </div>
+
+
+                            {% endif %}
+
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="kart bos-kart">
+
+            <p>
+                Henüz paylaşılmış bir not yok. 📝
+            </p>
+
+            <span>
+                İlk notu sen paylaş! ✨
+            </span>
+
+        </div>
+
+
+    {% endfor %}
+
+
+    <!-- ANA SAYFA -->
+
+    <a
+        href="{{ url_for('index') }}"
+        class="ana-sayfa-btn"
+    >
+        🏠 Ana Sayfaya Dön
+    </a>
+
+
+</body>
+
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Giriş Yap - Do I Wanna Book & Music?</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+
+    <div class="kullanici-alani">
+
+        <a href="{{ url_for('index') }}">
+            🏠 Ana Sayfa
+        </a>
+
+    </div>
+
+
+    <h1 class="site-baslik">
+        ✨ Tekrar Hoş Geldin
+    </h1>
+
+
+    <div class="kart giris-kutu">
+
+
+        <div class="form-baslik">
+
+            <span class="form-ikon">
+                🔐
+            </span>
+
+            <h2>
+                Giriş Yap
+            </h2>
+
+            <p>
+                Kitaplarına, müziklerine ve sohbetlere devam et.
+            </p>
+
+        </div>
+
+
+        <form method="POST">
+
+
+            <label for="kullanici_adi">
+                👤 Kullanıcı adı
+            </label>
+
+
+            <input
+                id="kullanici_adi"
+                type="text"
+                name="kullanici_adi"
+                placeholder="Kullanıcı adını yaz..."
+                autocomplete="username"
+                required
+            >
+
+
+            <label for="sifre">
+                🔐 Şifre
+            </label>
+
+
+            <div class="sifre-alani">
+
+                <input
+                    id="sifre"
+                    type="password"
+                    name="sifre"
+                    placeholder="Şifreni yaz..."
+                    autocomplete="current-password"
+                    required
+                >
+
+
+                <button
+                    type="button"
+                    class="sifre-goster"
+                    onclick="sifreGosterGizle()"
+                    aria-label="Şifreyi göster"
+                >
+                    👁️
+                </button>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="ana-form-butonu"
+            >
+                🚀 Giriş Yap
+            </button>
+
+
+        </form>
+
+
+        <div class="form-ayirici">
+            <span>veya</span>
+        </div>
+
+
+        <p class="form-alt-yazi">
+
+            Hesabın yok mu?
+
+            <a href="{{ url_for('kayit') }}">
+                Kayıt Ol
+            </a>
+
+        </p>
+
+
+    </div>
+
+
+    <script>
+
+        function sifreGosterGizle() {
+
+            const sifre =
+                document.getElementById("sifre");
+
+            const buton =
+                document.querySelector(".sifre-goster");
+
+
+            if (sifre.type === "password") {
+
+                sifre.type = "text";
+
+                buton.textContent = "🙈";
+
+                buton.setAttribute(
+                    "aria-label",
+                    "Şifreyi gizle"
+                );
+
+            } else {
+
+                sifre.type = "password";
+
+                buton.textContent = "👁️";
+
+                buton.setAttribute(
+                    "aria-label",
+                    "Şifreyi göster"
+                );
+
+            }
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
